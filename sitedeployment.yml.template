@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: ${namespace}
+  name: sitespeedio
+spec:
+  template:
+    metadata:
+      labels:
+        app: sitespeedio
+    spec:
+      containers:
+      - name: sitespeedio
+        image: ${image}
+        args:
+${args}
+        - --graphite.host=graphite
+        securityContext:
+          privileged: true
+      restartPolicy: Never
