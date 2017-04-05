@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 		ca-certificates \
 		gettext-base
 
-RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.4.6/bin/linux/amd64/kubectl -O /usr/bin/kubectl && \
+RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.6.0/bin/linux/amd64/kubectl -O /usr/bin/kubectl && \
 	chmod +x /usr/bin/kubectl
 
 COPY sitedeployment.yml.template /sitedeployment.yml.template
