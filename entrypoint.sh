@@ -3,7 +3,7 @@ test -z "${DEBUG}" || set -o xtrace
 
 function active_job_exists() {
 
-    job=$(kubectl get job sitespeedio --namespace "${SELF_NAMESPACE}" --output json)
+    job=$(kubectl get job sitespeedio --namespace "${SELF_NAMESPACE}" --output json &> /dev/null)
     [[ $? -eq 1 ]] && return 1 # If error job does not exist
 
     active=$(echo $job | jq '.status.active')
