@@ -13,7 +13,8 @@ spec:
         image: ${image}
         args:
 ${args}
-        - --graphite.host=graphite.${client_namespace}
+        - --graphite.namespace=${graphite_namespace}
+        - --graphite.host=graphite${graphite_host_suffix}
         securityContext:
           privileged: true
       restartPolicy: Never
