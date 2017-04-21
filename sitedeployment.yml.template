@@ -1,20 +1,15 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Pod
 metadata:
   name: sitespeedio
 spec:
-  template:
-    metadata:
-      labels:
-        app: sitespeedio
-    spec:
-      containers:
-      - name: sitespeedio
-        image: ${image}
-        args:
+  containers:
+  - name: sitespeedio
+    image: ${image}
+    args:
 ${args}
-        - --graphite.namespace=${graphite_namespace}
-        - --graphite.host=graphite${graphite_host_suffix}
-        securityContext:
-          privileged: true
-      restartPolicy: Never
+    - --graphite.namespace=${graphite_namespace}
+    - --graphite.host=graphite${graphite_host_suffix}
+    securityContext:
+      privileged: true
+  restartPolicy: Never
