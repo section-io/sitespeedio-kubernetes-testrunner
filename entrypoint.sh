@@ -27,7 +27,7 @@ while true; do
         graphite_namespace=$(echo "${message}" | jq '.graphite_namespace' --raw-output)
         image=$(echo "${message}" | jq '.image' --raw-output)
         argarray=($(echo "${message}" | jq '.args[]' --raw-output))
-        args=$(printf "        - %s\n" "${argarray[@]}")
+        args=$(printf "    - %s\n" "${argarray[@]}")
 
         graphite_host_suffix=''
         if [[ "${client_namespace}" != 'null' ]]; then
