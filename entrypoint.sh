@@ -3,11 +3,10 @@ test -z "${DEBUG}" || set -o xtrace
 
 function active_job_exists() {
 
-    job=$(kubectl get job sitespeedio --namespace "${SELF_NAMESPACE}" --output json 2> /dev/null)
+    local status=$(kubectl get pod sitespeedio --show-all --namespace "${SELF_NAMESPACE}" --output 'jsonpath={.status.phase}' 2> /dev/null)
     [[ $? -eq 1 ]] && return 1 # If error job does not exist
 
-    active=$(echo $job | jq '.status.active')
-    [[ "${active}" == "null" ]] && return 1 # If `.status.active` is null then there is no active job
+    [[ "${status}" != "Running" ]] && return 1 # If `.status.phase` is not running then there is no active pod
 
     return 0
 }
@@ -28,7 +27,7 @@ while true; do
         graphite_namespace=$(echo "${message}" | jq '.graphite_namespace' --raw-output)
         image=$(echo "${message}" | jq '.image' --raw-output)
         argarray=($(echo "${message}" | jq '.args[]' --raw-output))
-        args=$(printf "        - %s\n" "${argarray[@]}")
+        args=$(printf "    - %s\n" "${argarray[@]}")
 
         graphite_host_suffix=''
         if [[ "${client_namespace}" != 'null' ]]; then
@@ -36,7 +35,7 @@ while true; do
         fi
 
         # Delete the old job
-        kubectl delete job sitespeedio --namespace "${SELF_NAMESPACE}" || echo "Job doesn't exist"
+        kubectl delete pod sitespeedio --namespace "${SELF_NAMESPACE}" || echo "Job doesn't exist"
 
         # Create a new job
         graphite_host_suffix="${graphite_host_suffix}" graphite_namespace="${graphite_namespace}" args="${args}" image="${image}" envsubst < /sitedeployment.yml.template | kubectl apply --namespace "${SELF_NAMESPACE}" -f -
