@@ -20,7 +20,7 @@ while true; do
     done
 
     # Take a message from the queue
-    response=$(redis-cli -h "${REDIS_HOST}" RPOPLPUSH "${QUEUE_NAME}" "${QUEUE_NAME}")
+    response=$(redis-cli -h "${REDIS_HOST}" RPOP "${QUEUE_NAME}")
     message=$(echo "${response}" | tail -1)
 
     if [[ ! -z "${message}" ]]; then
