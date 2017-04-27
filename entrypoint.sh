@@ -6,7 +6,7 @@ function active_job_exists() {
     local status=$(kubectl get pod sitespeedio --show-all --namespace "${SELF_NAMESPACE}" --output 'jsonpath={.status.phase}' 2> /dev/null)
     [[ $? -eq 1 ]] && return 1 # If error job does not exist
 
-    [[ "${status}" != "Running" ]] && return 1 # If `.status.phase` is not running then there is no active pod
+    [[ "${status}" != "Running" && "${status}" != "Pending" ]] && return 1 # If `.status.phase` is not running or pending then there is no active pod
 
     return 0
 }
