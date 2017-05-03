@@ -34,6 +34,10 @@ while true; do
             graphite_host_suffix=".${client_namespace}"
         fi
 
+        if [[ "${graphite_namespace}" == 'null' ]]; then
+            graphite_namespace="sitespeed_io.default"
+        fi
+
         # Delete the old job
         kubectl delete pod sitespeedio --namespace "${SELF_NAMESPACE}" || echo "Job doesn't exist"
 
